@@ -3,6 +3,7 @@
 <head>
   <title>TIC TAC TOE</title>
   <link rel="stylesheet" href="./css/tic-tac-toe.css">
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
 </head>
 
 <body>
@@ -46,7 +47,44 @@
       </div>
     </aside>
   </div>
-  <script src="./js/game.js"></script>
+  <script>
+    /* eslint-disable no-undef */
+    const socket = io('http://localhost:3000');
+
+    const game = document.getElementById('game');
+    const boxes = document.querySelectorAll('li');
+
+    let player1 = true;
+
+    const gamePlay = (e) => {
+      if (player1) {
+        e.target.innerText = 'X';
+        e.target.className = 'x';
+        player1 = false;
+      } else {
+        e.target.innerText = 'O';
+        e.target.className = 'o';
+        player1 = true;
+      }
+    };
+
+    boxes.forEach((box) => {
+      box.addEventListener('click', (e) => {
+        gamePlay(e);
+
+        const boardGame = game.outerHTML;
+        console.log(boardGame)
+        socket.emit('teste', boardGame);
+      });
+    });
+
+    const setPlayerMove = (obj) => {
+      
+    }
+
+    socket.on('playerMove', setPlayerMove);
+
+  </script>
 </body>
 
 </html>

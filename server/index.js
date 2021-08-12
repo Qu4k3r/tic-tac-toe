@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
+
 const app = express();
 
 const socketIoServer = require('http').createServer(app);
@@ -13,10 +14,14 @@ const io = require('socket.io')(socketIoServer, {
   },
 });
 
+const gameSocket = require('../sockets/game');
+
 io.on('connection', (socket) => {
   socket.on('enterGame', (codeRoom) => {
     console.log(codeRoom);
   });
+
+  gameSocket(socket);
 });
 
 app.use(cors());
